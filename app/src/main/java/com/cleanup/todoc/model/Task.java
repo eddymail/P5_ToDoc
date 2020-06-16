@@ -76,6 +76,11 @@ public class Task {
         this.id = id;
     }
 
+    /**
+     * Returns the unique identifier of the project associated to the task.
+     *
+     * @return the unique identifier of the project associated to the task.
+     */
     public long getProjectId() {
         return projectId;
     }
@@ -118,6 +123,11 @@ public class Task {
         this.name = name;
     }
 
+    /**
+     * Returns the creation Timestamp of the task.
+     *
+     * @return the creation Timestamp of the task
+     */
     public long getCreationTimestamp() {
         return creationTimestamp;
     }
