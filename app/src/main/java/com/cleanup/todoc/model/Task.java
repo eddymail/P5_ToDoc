@@ -27,8 +27,8 @@ public class Task {
     /**
      * The unique identifier of the project associated to the task
      */
-
     private long projectId;
+
 
     /**
      * The name of the task
@@ -76,6 +76,10 @@ public class Task {
         this.id = id;
     }
 
+    public long getProjectId() {
+        return projectId;
+    }
+
     /**
      * Sets the unique identifier of the project associated to the task.
      *
@@ -112,6 +116,10 @@ public class Task {
      */
     private void setName(@NonNull String name) {
         this.name = name;
+    }
+
+    public long getCreationTimestamp() {
+        return creationTimestamp;
     }
 
     /**
