@@ -1,4 +1,4 @@
-package com.cleanup.todoc.database;
+package com.cleanup.todoc.database.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -6,7 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.models.Task;
 
 import java.util.List;
 
@@ -14,9 +14,10 @@ import java.util.List;
 public interface TaskDao {
 
     @Query("SELECT * FROM Task WHERE projectId = :projectId")
-    LiveData<List<Task>>  getTasks(long projectId);
+    LiveData<List<Task>> getTasks(long projectId);
 
     @Insert
+    // id est automatiquement généré
     long insertTask(Task task);
 
     @Update

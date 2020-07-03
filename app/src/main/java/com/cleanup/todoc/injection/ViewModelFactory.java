@@ -3,8 +3,8 @@ package com.cleanup.todoc.injection;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.cleanup.todoc.repositorie.ProjectDataRepository;
-import com.cleanup.todoc.repositorie.TaskDataRepository;
+import com.cleanup.todoc.repository.ProjectDataRepository;
+import com.cleanup.todoc.repository.TaskDataRepository;
 import com.cleanup.todoc.ui.TaskViewModel;
 
 import java.util.concurrent.Executor;

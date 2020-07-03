@@ -9,8 +9,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.cleanup.todoc.model.Project;
-import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.database.dao.ProjectDao;
+import com.cleanup.todoc.database.dao.TaskDao;
+import com.cleanup.todoc.models.Project;
+import com.cleanup.todoc.models.Task;
 
 
 @Database(entities = {Task.class, Project.class}, version = 1, exportSchema = false)
@@ -20,8 +22,8 @@ public abstract class ToDocDatabase extends RoomDatabase {
     private static volatile ToDocDatabase INSTANCE;
 
     // --- DAO ---
-    public abstract TaskDao itemDao();
-    public abstract ProjectDao userDao();
+    public abstract TaskDao taskDao();
+    public abstract ProjectDao projectDao();
 
     // --- INSTANCE ---
     public static ToDocDatabase getInstance(Context context) {
@@ -48,9 +50,9 @@ public abstract class ToDocDatabase extends RoomDatabase {
                 super.onCreate(db);
 
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("id", 1L);
-                contentValues.put("name", "Projet Tartampion");
-                contentValues.put("color", 0xFFEADAD1);
+                contentValues.put("id", 4L);
+                contentValues.put("name", "Projet McGreggor");
+                contentValues.put("color", 0xFFE89028);
 
                 db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
             }
