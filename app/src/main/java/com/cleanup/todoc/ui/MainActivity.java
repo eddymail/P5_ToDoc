@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
         setContentView(R.layout.activity_main);
 
-        viewModel = new TaskViewModel(Injection.provideTaskDataSource(this), Injection.provideProjectDataSource(this), Injection.provideExecutor());
+        viewModel = new TaskViewModel(Injection.provideTaskDataSource(this), Injection.provideExecutor());
 
        Injection.provideTaskDataSource(this).getTasks(1).observe(this, new Observer<List<Task>>() {
            @Override
@@ -130,8 +130,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         this.configureViewModel();
 
         // Get current project & tasks from Database
-        this.getCurrentProject(PROJECT_ID);
-        this.getTasks(PROJECT_ID);
+
     }
 
     @Override
@@ -168,22 +167,25 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
     // Get Current Project
     private void getCurrentProject(int projectId){
-        this.viewModel.getProject(projectId);
+        this.viewModel.getProject(projectId).observe(this, this::updateProject);
+
     }
+
+    private void updateProject(Project project) {
+        Project taskProject = (Project) dialogSpinner.getSelectedItem();
+        taskProject.getId();
+    }
+
 
     // Get all tasks for a project
     private void getTasks(int projectId){
-        this.viewModel.getTasks(projectId).observe(this, new Observer<List<Task>>() {
-            @Override
-            public void onChanged(@Nullable List<Task> tasks) {
-                updateTasks();
-            }
-        });
+        this.viewModel.getTasks(projectId).observe(this, tasks -> updateTasks());
     }
 
     @Override
     public void onDeleteTask(Task task) {
         tasks.remove(task);
+        viewModel.deleteTask(task.getId());
         updateTasks();
     }
 
@@ -202,6 +204,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             Project taskProject = null;
             if (dialogSpinner.getSelectedItem() instanceof Project) {
                 taskProject = (Project) dialogSpinner.getSelectedItem();
+                //Get the currentProject
+                this.getCurrentProject(PROJECT_ID);
             }
 
             // If a name has not been set
@@ -211,11 +215,9 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             // If both project and name of the task have been set
             else if (taskProject != null) {
                 // TODO: Replace this by id of persisted task
-                long id = (long) (Math.random() * 50000);
-
 
                 Task task = new Task(
-                        id,
+                        null,
                         taskProject.getId(),
                         taskName,
                         new Date().getTime()
@@ -231,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                 dialogInterface.dismiss();
             }
         }
-        // If dialog is aloready closed
+        // If dialog is already closed
         else {
             dialogInterface.dismiss();
         }
@@ -289,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             adapter.updateTasks(tasks);
         }
     }
+
 
     /**
      * Returns the dialog allowing the user to create a new task.

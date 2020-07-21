@@ -7,14 +7,14 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.cleanup.todoc.models.Project;
+import com.cleanup.todoc.models.ProjectDataBase;
 
 @Dao
 public interface ProjectDao {
 
-    // Permet d'écraser un utilisateur déjà existant possèdant le même id
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void createProject(Project project);
+    void createProject(ProjectDataBase projectDataBase);
 
-    @Query("SELECT * FROM Project WHERE id =:projectId")
-    LiveData<Project> getProject(long projectId);
+    @Query("SELECT * FROM ProjectDataBase WHERE id = :projectDataBaseId")
+    LiveData<Project> getProject(long projectDataBaseId);
 }

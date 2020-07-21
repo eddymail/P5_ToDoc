@@ -15,7 +15,7 @@ import com.cleanup.todoc.models.Project;
 import com.cleanup.todoc.models.Task;
 
 
-@Database(entities = {Task.class, Project.class}, version = 1, exportSchema = false)
+@Database(entities = {Task.class}, version = 1, exportSchema = false)
 public abstract class ToDocDatabase extends RoomDatabase {
 
     // --- SINGLETON ---
@@ -24,6 +24,7 @@ public abstract class ToDocDatabase extends RoomDatabase {
     // --- DAO ---
     public abstract TaskDao taskDao();
     public abstract ProjectDao projectDao();
+
 
     // --- INSTANCE ---
     public static ToDocDatabase getInstance(Context context) {
@@ -55,6 +56,7 @@ public abstract class ToDocDatabase extends RoomDatabase {
                 contentValues.put("color", 0xFFE89028);
 
                 db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
+
             }
         };
     }

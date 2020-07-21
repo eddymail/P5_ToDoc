@@ -13,22 +13,23 @@ import java.util.Comparator;
  *
  * @author Gaëtan HERFRAY
  */
-@Entity(foreignKeys = @ForeignKey(entity = Project.class,
+@Entity(foreignKeys = @ForeignKey(entity = ProjectDataBase.class,
 parentColumns = "id",
-childColumns = "projectId" ))
+childColumns = "projectId"))
 
 public class Task {
     /**
      * The unique identifier of the task
      */
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private Long id;
 
     /**
      * The unique identifier of the project associated to the task
      */
     private long projectId;
 
+    private long projectDataBaseId;
 
     /**
      * The name of the task
@@ -51,9 +52,10 @@ public class Task {
      * @param name              the name of the task to set
      * @param creationTimestamp the timestamp when the task has been created to set
      */
-    public Task(long id, long projectId, @NonNull String name, long creationTimestamp) {
+    public Task(Long id, long projectId, long projectDataBaseId, @NonNull String name, long creationTimestamp) {
         this.setId(id);
         this.setProjectId(projectId);
+        this.setProjectDataBaseId(projectDataBaseId);
         this.setName(name);
         this.setCreationTimestamp(creationTimestamp);
     }
@@ -63,7 +65,7 @@ public class Task {
      *
      * @return the unique identifier of the task
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -72,7 +74,7 @@ public class Task {
      *
      * @param id the unique idenifier of the task to set
      */
-    private void setId(long id) {
+    private void setId(Long id) {
         this.id = id;
     }
 
@@ -140,6 +142,16 @@ public class Task {
     private void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
+
+    public long getProjectDataBaseId() {
+        return projectDataBaseId;
+    }
+
+    public void setProjectDataBaseId(long projectDataBaseId) {
+        this.projectDataBaseId = projectDataBaseId;
+    }
+
+
 
     /**
      * Comparator to sort task from A to Z
