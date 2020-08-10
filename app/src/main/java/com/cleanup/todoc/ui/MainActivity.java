@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     /**
      * List of all projects available in the application
      */
-    private final Project[] allProjects = Project.getAllProjects();
+    private Project[] allProjects;
 
     /**
      * List of all current tasks of the application
@@ -103,15 +103,24 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
         setContentView(R.layout.activity_main);
 
-        viewModel = new TaskViewModel(Injection.provideTaskDataSource(this), Injection.provideExecutor());
+        viewModel = new TaskViewModel(Injection.provideTaskDataSource(this), Injection.provideProjectDataSource(this), Injection.provideExecutor());
 
-       Injection.provideTaskDataSource(this).getTasks(1).observe(this, new Observer<List<Task>>() {
-           @Override
-           public void onChanged(@Nullable List<Task> tasks) {
-               MainActivity.this.tasks.addAll(tasks);
-               updateTasks();
-           }
-       });
+        Injection.provideTaskDataSource(this).getTasks().observe(this, new Observer<List<Task>>() {
+            @Override
+            public void onChanged(@Nullable List<Task> tasks) {
+                MainActivity.this.tasks.clear();
+                MainActivity.this.tasks.addAll(tasks);
+                updateTasks();
+            }
+        });
+
+        Injection.provideProjectDataSource(this).getAll().observe(this, new Observer<Project[]>() {
+            @Override
+            public void onChanged(@Nullable Project[] projects) {
+                MainActivity.this.allProjects = projects;
+                updateProjects();
+        }
+        });
 
         listTasks = findViewById(R.id.list_tasks);
         lblNoTasks = findViewById(R.id.lbl_no_task);
@@ -128,8 +137,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
         // Configure ViewModel
         this.configureViewModel();
-
-        // Get current project & tasks from Database
 
     }
 
@@ -159,27 +166,10 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     }
 
     // Configuring ViewModel
-    private void configureViewModel(){
+    private void configureViewModel() {
         ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(this);
         this.viewModel = ViewModelProviders.of(this, mViewModelFactory).get(TaskViewModel.class);
         this.viewModel.init(PROJECT_ID);
-    }
-
-    // Get Current Project
-    private void getCurrentProject(int projectId){
-        this.viewModel.getProject(projectId).observe(this, this::updateProject);
-
-    }
-
-    private void updateProject(Project project) {
-        Project taskProject = (Project) dialogSpinner.getSelectedItem();
-        taskProject.getId();
-    }
-
-
-    // Get all tasks for a project
-    private void getTasks(int projectId){
-        this.viewModel.getTasks(projectId).observe(this, tasks -> updateTasks());
     }
 
     @Override
@@ -204,8 +194,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             Project taskProject = null;
             if (dialogSpinner.getSelectedItem() instanceof Project) {
                 taskProject = (Project) dialogSpinner.getSelectedItem();
-                //Get the currentProject
-                this.getCurrentProject(PROJECT_ID);
             }
 
             // If a name has not been set
@@ -253,16 +241,10 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         populateDialogSpinner();
     }
 
-    /**
-     * Adds the given task to the list of created tasks.
-     *
-     * @param task the task to be added to the list
-     */
-    private void addTask(@NonNull Task task) {
-        tasks.add(task);
-        updateTasks();
+    private void updateProjects()
+    {
+        adapter.setProjects(this.allProjects);
     }
-
     /**
      * Updates the list of tasks in the UI
      */
@@ -291,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             adapter.updateTasks(tasks);
         }
     }
-
 
     /**
      * Returns the dialog allowing the user to create a new task.

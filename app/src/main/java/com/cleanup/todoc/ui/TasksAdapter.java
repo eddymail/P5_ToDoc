@@ -27,6 +27,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
     @NonNull
     private List<Task> tasks;
 
+    private Project[] projects = null;
+
     /**
      * The listener for when a task needs to be deleted
      */
@@ -50,7 +52,15 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      */
     void updateTasks(@NonNull final List<Task> tasks) {
         this.tasks = tasks;
+        mapProjectsToTasks();
         notifyDataSetChanged();
+    }
+
+    public void setProjects(Project[] projects) {
+        this.projects = projects;
+        mapProjectsToTasks();
+        notifyDataSetChanged();
+
     }
 
     @NonNull
@@ -68,6 +78,26 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
     @Override
     public int getItemCount() {
         return tasks.size();
+    }
+
+    public void mapProjectsToTasks() {
+        if(this.projects != null && this.tasks != null) {
+            for(Task task : this.tasks) {
+                task.setProject(getProjectById(task.getProjectId()));
+            }
+        }
+
+    }
+
+    public Project getProjectById(long projectId) {
+        if(this.projects != null) {
+            for(Project project: this.projects){
+                if(project.getId() == projectId){
+                    return project;
+                }
+            }
+        }
+        return null;
     }
 
     /**

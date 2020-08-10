@@ -1,28 +1,28 @@
 package com.cleanup.todoc.ui;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.support.annotation.Nullable;
 
 import com.cleanup.todoc.models.Project;
 import com.cleanup.todoc.models.Task;
+import com.cleanup.todoc.repository.ProjectDataRepository;
 import com.cleanup.todoc.repository.TaskDataRepository;
 
-import java.util.List;
 import java.util.concurrent.Executor;
 
 public class TaskViewModel extends ViewModel {
 
     // REPOSITORIES
     private final TaskDataRepository taskDataSource;
+    private final ProjectDataRepository projectDataSource;
     private final Executor executor;
 
     // DATA
-    private MutableLiveData<Project> currentProject = new MutableLiveData<>();
+    private LiveData<Project> currentProject;
 
-    public TaskViewModel(TaskDataRepository taskDataSource, Executor executor) {
+    public TaskViewModel(TaskDataRepository taskDataSource, ProjectDataRepository projectDataRepository, Executor executor) {
         this.taskDataSource = taskDataSource;
+        this.projectDataSource = projectDataRepository;
         this.executor = executor;
     }
 
@@ -30,20 +30,8 @@ public class TaskViewModel extends ViewModel {
         if (this.currentProject != null) {
             return;
         }
-        currentProject.setValue(Project.getProjectById(projectId));
+        currentProject = projectDataSource.getProject(projectId);
     }
-
-    // -----------------
-    // FOR PROJECT
-    // -----------------
-
-    public LiveData<Project> getProject(long projectId) { return this.currentProject; }
-
-    // -----------------
-    // FOR TASK
-    // -----------------
-
-    public LiveData<List<Task>> getTasks(long projectId) { return taskDataSource.getTasks(projectId); }
 
     public void createTask(Task task) {
         executor.execute(() -> {
@@ -51,15 +39,10 @@ public class TaskViewModel extends ViewModel {
         });
     }
 
-    public void deleteTask(long projectId) {
+    public void deleteTask(long projectDataBaseId) {
         executor.execute(() -> {
-            taskDataSource.deleteTask(projectId);
+            taskDataSource.deleteTask(projectDataBaseId);
         });
     }
 
-    public void updateTask(Task task) {
-        executor.execute(() -> {
-            taskDataSource.updateTask(task);
-        });
-    }
 }

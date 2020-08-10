@@ -14,8 +14,7 @@ import com.cleanup.todoc.database.dao.TaskDao;
 import com.cleanup.todoc.models.Project;
 import com.cleanup.todoc.models.Task;
 
-
-@Database(entities = {Task.class}, version = 1, exportSchema = false)
+@Database(entities = {Task.class, Project.class}, version = 1, exportSchema = false)
 public abstract class ToDocDatabase extends RoomDatabase {
 
     // --- SINGLETON ---
@@ -51,11 +50,18 @@ public abstract class ToDocDatabase extends RoomDatabase {
                 super.onCreate(db);
 
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("id", 4L);
+                contentValues.put("id", 1);
                 contentValues.put("name", "Projet McGreggor");
                 contentValues.put("color", 0xFFE89028);
 
                 db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
+
+                ContentValues contentValues2 = new ContentValues();
+                contentValues2.put("id", 2);
+                contentValues2.put("name", "Projet McGahfy");
+                contentValues2.put("color", 0xFFFF0000);
+
+                db.insert("Project", OnConflictStrategy.IGNORE, contentValues2);
 
             }
         };

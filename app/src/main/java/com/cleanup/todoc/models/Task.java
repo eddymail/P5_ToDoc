@@ -2,6 +2,7 @@ package com.cleanup.todoc.models;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +14,7 @@ import java.util.Comparator;
  *
  * @author Gaëtan HERFRAY
  */
-@Entity(foreignKeys = @ForeignKey(entity = ProjectDataBase.class,
+@Entity(foreignKeys = @ForeignKey(entity = Project.class,
 parentColumns = "id",
 childColumns = "projectId"))
 
@@ -29,8 +30,6 @@ public class Task {
      */
     private long projectId;
 
-    private long projectDataBaseId;
-
     /**
      * The name of the task
      */
@@ -44,6 +43,9 @@ public class Task {
      */
     private long creationTimestamp;
 
+    @Ignore
+    private Project project;
+
     /**
      * Instantiates a new Task.
      *
@@ -52,10 +54,9 @@ public class Task {
      * @param name              the name of the task to set
      * @param creationTimestamp the timestamp when the task has been created to set
      */
-    public Task(Long id, long projectId, long projectDataBaseId, @NonNull String name, long creationTimestamp) {
+    public Task(Long id, long projectId, @NonNull String name, long creationTimestamp) {
         this.setId(id);
         this.setProjectId(projectId);
-        this.setProjectDataBaseId(projectDataBaseId);
         this.setName(name);
         this.setCreationTimestamp(creationTimestamp);
     }
@@ -103,9 +104,12 @@ public class Task {
      */
     @Nullable
     public Project getProject() {
-        return Project.getProjectById(projectId);
+        return project;
     }
 
+    public void setProject(Project project) {
+        this.project = project;
+    }
     /**
      * Returns the name of the task.
      *
@@ -142,16 +146,6 @@ public class Task {
     private void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
     }
-
-    public long getProjectDataBaseId() {
-        return projectDataBaseId;
-    }
-
-    public void setProjectDataBaseId(long projectDataBaseId) {
-        this.projectDataBaseId = projectDataBaseId;
-    }
-
-
 
     /**
      * Comparator to sort task from A to Z
