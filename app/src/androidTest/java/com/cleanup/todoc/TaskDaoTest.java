@@ -16,6 +16,7 @@ import org.junit.Test;
 import java.util.Date;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
 public class TaskDaoTest {
@@ -26,8 +27,9 @@ public class TaskDaoTest {
     // DATA SET FOR TEST
     private static long PROJECT_ID = 1;
     private static Project PROJECT_DEMO = new Project(PROJECT_ID, "Projet", 0xFFD67EC3);
-    private static long TASK_ID = 1;
-    private static Task TASK_DEMO = new Task(TASK_ID,PROJECT_ID,"Passer l'aspirateur",new Date().getTime());
+    private static Task TASK_ASPIRATOR = new Task(1L,PROJECT_ID,"Passer l'aspirateur",new Date().getTime());
+    private static Task TASK_WINDOW = new Task(2L,PROJECT_ID,"Laver les vitres",new Date().getTime());
+    private static Task TASK_EMPTY = new Task(3L,PROJECT_ID,"Vider la corbeille",new Date().getTime());
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -65,17 +67,19 @@ public class TaskDaoTest {
     public void insertAndGetTasks() throws InterruptedException{
         //BEFORE : Adding demo project and demo task
         this.database.projectDao().createProject(PROJECT_DEMO);
-        this.database.taskDao().insertTask(TASK_DEMO);
+        this.database.taskDao().insertTask(TASK_ASPIRATOR);
+        this.database.taskDao().insertTask(TASK_EMPTY);
+        this.database.taskDao().insertTask(TASK_WINDOW);
         //TEST
         List<Task> tasks = LiveDataTestUtil.getValue(this.database.taskDao().getTasks());
-        assertTrue(tasks.size() == 1);
+        assertEquals(3, tasks.size());
     }
 
     @Test
     public void insertAndDeleteTask() throws InterruptedException {
         // BEFORE : Adding demo user & demo item. Next, get the item added & delete it.
         this.database.projectDao().createProject(PROJECT_DEMO);
-        this.database.taskDao().insertTask(TASK_DEMO);
+        this.database.taskDao().insertTask(TASK_ASPIRATOR);
         Task taskAdded = LiveDataTestUtil.getValue(this.database.taskDao().getTasks()).get(0);
         this.database.taskDao().deleteTask(taskAdded.getId());
         //TEST
