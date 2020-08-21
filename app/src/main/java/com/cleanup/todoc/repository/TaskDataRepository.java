@@ -10,19 +10,13 @@ import java.util.List;
 public class TaskDataRepository {
 
     private final TaskDao taskDao;
-
+    //constructor
     public TaskDataRepository(TaskDao taskDao) {this.taskDao = taskDao; }
-
-    // --- GET ---
+    //get
     public LiveData<List<Task>> getTasks(){ return this.taskDao.getTasks(); }
-
-    // --- CREATE ---
-    public void createTask(Task task)
-    {
-        taskDao.insertTask(task);
-    }
-
-    // --- DELETE ---
+    //create
+    public void createTask(Task task) { taskDao.insertTask(task); }
+    //delete
     public void deleteTask(long taskId){ taskDao.deleteTask(taskId); }
 
 }

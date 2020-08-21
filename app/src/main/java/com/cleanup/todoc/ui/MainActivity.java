@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     @NonNull
     private TextView lblNoTasks;
 
+    //For Data
     private TaskViewModel viewModel;
-
     private static int PROJECT_ID = 1;
 
     @Override
@@ -103,9 +103,9 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
         setContentView(R.layout.activity_main);
 
-        viewModel = new TaskViewModel(Injection.provideTaskDataSource(this), Injection.provideProjectDataSource(this), Injection.provideExecutor());
+        this.configureViewModel();
 
-        Injection.provideTaskDataSource(this).getTasks().observe(this, new Observer<List<Task>>() {
+        this.viewModel.getTasks().observe(this, new Observer<List<Task>>() {
             @Override
             public void onChanged(@Nullable List<Task> tasks) {
                 MainActivity.this.tasks.clear();
@@ -114,13 +114,13 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             }
         });
 
-        Injection.provideProjectDataSource(this).getAll().observe(this, new Observer<Project[]>() {
-            @Override
-            public void onChanged(@Nullable Project[] projects) {
-                MainActivity.this.allProjects = projects;
-                updateProjects();
-        }
-        });
+       this.viewModel.getAll().observe(this, new Observer<Project[]>() {
+           @Override
+           public void onChanged(@Nullable Project[] projects) {
+               MainActivity.this.allProjects = projects;
+               updateProjects();
+           }
+       });
 
         listTasks = findViewById(R.id.list_tasks);
         lblNoTasks = findViewById(R.id.lbl_no_task);
@@ -135,9 +135,13 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             }
         });
 
-        // Configure ViewModel
-        this.configureViewModel();
+    }
 
+    // Configuring ViewModel
+    private void configureViewModel() {
+        ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(this);
+        this.viewModel = ViewModelProviders.of(this, mViewModelFactory).get(TaskViewModel.class);
+        this.viewModel.init(PROJECT_ID);
     }
 
     @Override
@@ -165,13 +169,6 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         return super.onOptionsItemSelected(item);
     }
 
-    // Configuring ViewModel
-    private void configureViewModel() {
-        ViewModelFactory mViewModelFactory = Injection.provideViewModelFactory(this);
-        this.viewModel = ViewModelProviders.of(this, mViewModelFactory).get(TaskViewModel.class);
-        this.viewModel.init(PROJECT_ID);
-    }
-
     @Override
     public void onDeleteTask(Task task) {
         tasks.remove(task);
@@ -189,29 +186,23 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         if (dialogEditText != null && dialogSpinner != null) {
             // Get the name of the task
             String taskName = dialogEditText.getText().toString();
-
             // Get the selected project to be associated to the task
             Project taskProject = null;
             if (dialogSpinner.getSelectedItem() instanceof Project) {
                 taskProject = (Project) dialogSpinner.getSelectedItem();
             }
-
             // If a name has not been set
             if (taskName.trim().isEmpty()) {
                 dialogEditText.setError(getString(R.string.empty_task_name));
             }
             // If both project and name of the task have been set
             else if (taskProject != null) {
-                // TODO: Replace this by id of persisted task
-
                 Task task = new Task(
                         null,
                         taskProject.getId(),
                         taskName,
                         new Date().getTime()
                 );
-
-                // addTask(task);
                 viewModel.createTask(task);
 
                 dialogInterface.dismiss();
@@ -243,8 +234,9 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
     private void updateProjects()
     {
-        adapter.setProjects(this.allProjects);
+        adapter.updateProjects(this.allProjects);
     }
+
     /**
      * Updates the list of tasks in the UI
      */

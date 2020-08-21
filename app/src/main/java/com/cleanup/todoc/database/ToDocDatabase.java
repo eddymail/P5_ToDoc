@@ -16,15 +16,11 @@ import com.cleanup.todoc.models.Task;
 
 @Database(entities = {Task.class, Project.class}, version = 1, exportSchema = false)
 public abstract class ToDocDatabase extends RoomDatabase {
-
     // --- SINGLETON ---
     private static volatile ToDocDatabase INSTANCE;
-
     // --- DAO ---
     public abstract TaskDao taskDao();
     public abstract ProjectDao projectDao();
-
-
     // --- INSTANCE ---
     public static ToDocDatabase getInstance(Context context) {
         if (INSTANCE == null) {
@@ -52,14 +48,14 @@ public abstract class ToDocDatabase extends RoomDatabase {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put("id", 1);
                 contentValues.put("name", "Projet McGreggor");
-                contentValues.put("color", 0xFFE89028);
+                contentValues.put("color", 0xFFEADAD1);
 
                 db.insert("Project", OnConflictStrategy.IGNORE, contentValues);
 
                 ContentValues contentValues2 = new ContentValues();
                 contentValues2.put("id", 2);
                 contentValues2.put("name", "Projet McGahfy");
-                contentValues2.put("color", 0xFFFF0000);
+                contentValues2.put("color", 0xFFB4CDBA);
 
                 db.insert("Project", OnConflictStrategy.IGNORE, contentValues2);
 

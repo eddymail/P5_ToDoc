@@ -16,7 +16,6 @@ public interface TaskDao {
     LiveData<List<Task>> getTasks();
 
     @Insert
-    // id est automatiquement généré
     long insertTask(Task task);
 
     @Query("DELETE FROM Task WHERE id = :taskId")
