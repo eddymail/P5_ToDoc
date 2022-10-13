@@ -19,7 +19,7 @@ La base de données devra également être modélisée via un diagramme de modè
 
 Cloner le repository
 
-`https://github.com/eddymail/P5_ToDoc.git'
+`git clone  https://github.com/eddymail/P5_ToDoc.git`
 
 `cd Todoc`
 
