@@ -1,30 +1,24 @@
 # Todoc
 
-Ce dépôt contient le projet 5 pour le parcours OpenClassrooms Développeur d'applications Android.
+## General informations
+This repository contains a mini-application for P5 of the **Grande École du Numérique** course.
+Todoc is a task management application with data persistence via Room
+Context:
+The application is already developed. Data persistence through an SQLite database needs to be added.
+The database will also need to be modeled via a physical data model diagram.
 
-## Aperçu
+## Skills assessed
 
-Todoc est une application de gestion de tâche avec persistance des données via Room, réalisée dans le cadre du parcours Openclassrooms DA Android.
+* Design the technical architecture of an application using UML diagrams
+* Implement the data schema in the database
+* Make a design diagram of the application database
 
-L'application est déjà développée. La persistance des données via une base de données SQLite doit être ajoutée.
-La base de données devra également être modélisée via un diagramme de modèle physique des données.
+## Use
 
-## Compétences évaluées
+Clone repository
 
-* Concevoir l'architecture technique d'une application à l'aide de diagramme UML
-* Implémenter le schéma de données dans la base
-* Réaliser un schéma de conception de la base de données de l’application
-
-## Usage
-
-Cloner le repository
-
-`git clone  https://github.com/eddymail/P5_ToDoc.git`
-
+`git clone https://github.com/eddymail/P5_ToDoc.git`
 `cd Todoc`
-
-Lancer le projet dans Android Studio
-
-Sélectionner la configuration 'app' et build en cliquant sur le bouton "Make project"
-
-Lancer l'application en cliquant sur le bouton "Run'app'"
+Launch the project in Android Studio
+Select the 'app' and build configuration by clicking on the "Make project" button
+Launch the application by clicking on the "Run'app'" button
