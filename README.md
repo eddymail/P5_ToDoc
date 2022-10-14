@@ -17,8 +17,8 @@ The database will also need to be modeled via a physical data model diagram.
 
 Clone repository
 
-`git clone https://github.com/eddymail/P5_ToDoc.git`
-`cd Todoc`
-Launch the project in Android Studio
-Select the 'app' and build configuration by clicking on the "Make project" button
-Launch the application by clicking on the "Run'app'" button
+* `git clone https://github.com/eddymail/P5_ToDoc.git`
+* `cd Todoc`
+* Launch the project in Android Studio
+* Select the 'app' and build configuration by clicking on the "Make project" button
+* Launch the application by clicking on the "Run'app'" button
