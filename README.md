@@ -7,6 +7,8 @@ Context:
 The application is already developed. Data persistence through an SQLite database needs to be added.
 The database will also need to be modeled via a physical data model diagram.
 
+![Picture Prez Githib](https://user-images.githubusercontent.com/53012350/214003598-8bc15def-ac49-49ee-af70-0197d069d13a.png)
+
 ## Skills assessed
 
 * Design the technical architecture of an application using UML diagrams
